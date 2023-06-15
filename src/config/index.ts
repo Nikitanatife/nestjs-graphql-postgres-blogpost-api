@@ -1,3 +1,4 @@
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 import {
   HttpException,
@@ -46,6 +47,23 @@ class ConfigService {
     }
 
     return options;
+  }
+
+  // TODO: clear unused options
+  getDatabaseOptions(): TypeOrmModuleOptions {
+    return {
+      type: 'postgres',
+      // host: this.getValue('POSTGRES_HOST'),
+      port: parseInt(this.getValue('POSTGRES_PORT')),
+      username: this.getValue('POSTGRES_USER'),
+      password: this.getValue('POSTGRES_PASSWORD'),
+      database: this.getValue('POSTGRES_DB'),
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      migrations: ['dist/migrations/*{.ts,.js}'],
+      // cli: {
+      //   migrationsDir: 'src/migrations',
+      // },
+    };
   }
 }
 
