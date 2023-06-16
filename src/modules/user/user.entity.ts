@@ -25,7 +25,7 @@ export class User extends LocalBaseEntity {
   @IsEmail()
   email: string;
 
-  @Field()
+  // @Field()
   @Column()
   @Matches(PASSWORD_REGEX)
   password: string;

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateUserInput } from './inputs';
+import { FindOneOptions, Repository } from 'typeorm';
+import { CreateUserInput } from '../auth/inputs';
 import { User } from './user.entity';
 
 @Injectable()
@@ -23,5 +23,9 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async getOne(options: FindOneOptions<User>) {
+    return this.userRepository.findOne(options);
   }
 }

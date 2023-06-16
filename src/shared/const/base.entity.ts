@@ -1,10 +1,11 @@
-import { Field, ID } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+@ObjectType()
 export class LocalBaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
