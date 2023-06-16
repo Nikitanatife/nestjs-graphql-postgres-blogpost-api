@@ -1,10 +1,10 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import * as dotenv from 'dotenv';
 import {
   HttpException,
   HttpStatus,
   ValidationPipeOptions,
 } from '@nestjs/common';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import * as dotenv from 'dotenv';
 import { DataSourceOptions } from 'typeorm';
 
 dotenv.config();
