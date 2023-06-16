@@ -1,19 +1,21 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, Matches, Min } from 'class-validator';
+import { IsEmail, IsNotEmpty, Matches, MinLength } from 'class-validator';
 import { PASSWORD_REGEX } from '../../../shared/const';
+
+const ERROR_MESSAGE = 'Wrong credentials';
 
 @InputType()
 export class LoginInput {
   @Field()
-  @IsEmail({}, { message: 'Wrong credentials' })
-  @IsNotEmpty()
+  @IsEmail({}, { message: ERROR_MESSAGE })
+  @IsNotEmpty({ message: ERROR_MESSAGE })
   email: string;
 
   @Field()
   @Matches(PASSWORD_REGEX, {
-    message: 'Wrong credentials',
+    message: ERROR_MESSAGE,
   })
-  @Min(8)
-  @IsNotEmpty()
+  @MinLength(8, { message: ERROR_MESSAGE })
+  @IsNotEmpty({ message: ERROR_MESSAGE })
   password: string;
 }

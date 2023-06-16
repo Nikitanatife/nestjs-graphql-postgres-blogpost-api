@@ -1,5 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IsEmail, Matches, validateOrReject } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  Matches,
+  validateOrReject,
+} from 'class-validator';
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import {
   LocalBaseEntity,
@@ -29,6 +35,12 @@ export class User extends LocalBaseEntity {
   @Column()
   @Matches(PASSWORD_REGEX)
   password: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  @IsString()
+  @IsOptional()
+  token?: string;
 
   @BeforeInsert()
   @BeforeUpdate()

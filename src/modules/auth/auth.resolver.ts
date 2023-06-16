@@ -1,15 +1,20 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreateUserInput } from './inputs';
+import { User } from '../user';
+import { CreateUserInput, LoginInput } from './inputs';
 import { AuthService } from './auth.service';
-import { RegisterObjectType } from './object-types';
 
 @Resolver('Auth')
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Mutation(() => RegisterObjectType)
-  async register(@Args('input') input: CreateUserInput) {
+  @Mutation(() => User)
+  async register(@Args('registerInput') input: CreateUserInput) {
     return this.authService.register(input);
+  }
+
+  @Mutation(() => User)
+  async login(@Args('loginInput') input: LoginInput) {
+    return this.authService.login(input);
   }
 
   @Query(() => String)

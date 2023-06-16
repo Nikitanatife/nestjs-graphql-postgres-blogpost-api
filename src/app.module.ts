@@ -17,11 +17,23 @@ import { AuthModule } from './modules/auth';
       driver: ApolloDriver,
       sortSchema: true,
       playground: true,
-      formatError: (error: GraphQLError) => ({
-        message: `${error.extensions['status'] || 500} ${
-          error.extensions?.originalError['error'] || 'Internal server error'
-        }: ${error.extensions?.message || error.message}`,
-      }),
+      formatError: (error: GraphQLError) => {
+        console.log(error);
+
+        const originalError = error.extensions?.originalError as {
+          [key: string]: unknown;
+        };
+
+        return {
+          message: `${error.extensions?.status || 500} ${
+            originalError?.error || 'Internal server error'
+          }: ${JSON.stringify(
+            originalError?.message ||
+              error.extensions?.message ||
+              error.message,
+          )}`,
+        };
+      },
     }),
     UserModule,
     AuthModule,
