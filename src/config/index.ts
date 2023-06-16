@@ -5,6 +5,7 @@ import {
   HttpStatus,
   ValidationPipeOptions,
 } from '@nestjs/common';
+import { DataSourceOptions } from 'typeorm';
 
 dotenv.config();
 
@@ -49,21 +50,28 @@ class ConfigService {
     return options;
   }
 
-  // TODO: clear unused options
-  getDatabaseOptions(): TypeOrmModuleOptions {
+  private getDbConfig(): DataSourceOptions {
     return {
       type: 'postgres',
-      // host: this.getValue('POSTGRES_HOST'),
       port: parseInt(this.getValue('POSTGRES_PORT')),
       username: this.getValue('POSTGRES_USER'),
       password: this.getValue('POSTGRES_PASSWORD'),
       database: this.getValue('POSTGRES_DB'),
-      entities: ['dist/**/*.entity{.ts,.js}'],
-      migrations: ['dist/migrations/*{.ts,.js}'],
-      // cli: {
-      //   migrationsDir: 'src/migrations',
-      // },
+      entities: [__dirname + '/../modules/**/*.entity.{js,ts}'],
+      migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+      migrationsTableName: 'migrations_typeorm',
+      migrationsRun: true,
+      logging: true,
+      synchronize: false,
     };
+  }
+
+  getTypeOrmOptions(): TypeOrmModuleOptions {
+    return this.getDbConfig();
+  }
+
+  getTypeOrmCliOptions(): DataSourceOptions {
+    return this.getDbConfig();
   }
 }
 
