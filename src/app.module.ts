@@ -25,7 +25,9 @@ import { AuthModule } from './modules/auth';
         };
 
         return {
-          message: `${error.extensions?.status || 500} ${
+          message: `${
+            error.extensions?.status || originalError.statusCode || 500
+          } ${
             originalError?.error || 'Internal server error'
           }: ${JSON.stringify(
             originalError?.message ||

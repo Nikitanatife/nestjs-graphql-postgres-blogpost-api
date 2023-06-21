@@ -4,7 +4,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user';
+import { User, UserService } from '../user';
 import { CreateUserInput, LoginInput } from './inputs';
 import { genSalt, hash, compare } from 'bcryptjs';
 
@@ -58,5 +58,9 @@ export class AuthService {
     return user;
   }
 
-  // TODO: Add a logout method
+  async logout(user: User) {
+    await this.userService.update(user.id, { token: null });
+
+    return true;
+  }
 }

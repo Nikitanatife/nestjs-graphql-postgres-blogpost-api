@@ -1,5 +1,8 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CurrentUser } from '../../shared/decorators';
 import { User } from '../user';
+import { AuthGuard } from './guards';
 import { CreateUserInput, LoginInput } from './inputs';
 import { AuthService } from './auth.service';
 
@@ -17,8 +20,9 @@ export class AuthResolver {
     return this.authService.login(input);
   }
 
-  @Query(() => String)
-  async hello() {
-    return 'Hello World!';
+  @UseGuards(AuthGuard)
+  @Query(() => Boolean)
+  async logout(@CurrentUser() user: User) {
+    return this.authService.logout(user);
   }
 }

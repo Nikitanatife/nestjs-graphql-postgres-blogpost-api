@@ -28,11 +28,11 @@
   "dependencies": {
     "@apollo/server": "^4.7.4",
     "@nestjs/apollo": "^11.0.6",
-    "@nestjs/common": "^9.0.0",
+    "@nestjs/common": "^9.4.3",
     "@nestjs/core": "^9.4.3",
     "@nestjs/graphql": "^11.0.6",
     "@nestjs/jwt": "^10.1.0",
-    "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/platform-express": "^9.4.3",
     "@nestjs/typeorm": "^10.0.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
