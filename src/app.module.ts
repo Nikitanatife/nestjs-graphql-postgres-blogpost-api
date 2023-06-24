@@ -6,6 +6,8 @@ import { GraphQLError } from 'graphql';
 import { configService } from './config';
 import { UserModule } from './modules/user';
 import { AuthModule } from './modules/auth';
+// import { BlogModule } from './modules/blog/blog.module';
+import { BlogPostModule } from './modules/blog-post/blog-post.module';
 
 @Module({
   imports: [
@@ -39,6 +41,8 @@ import { AuthModule } from './modules/auth';
     }),
     UserModule,
     AuthModule,
+    // BlogModule,
+    BlogPostModule,
   ],
   controllers: [],
   providers: [],

@@ -6,12 +6,13 @@ import {
   Matches,
   validateOrReject,
 } from 'class-validator';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import {
   LocalBaseEntity,
   PASSWORD_REGEX,
   USER_NAME_REGEX,
 } from '../../shared/const';
+import { BlogPost } from '../blog-post/blog-post.entity';
 
 @ObjectType()
 @Entity()
@@ -41,6 +42,9 @@ export class User extends LocalBaseEntity {
   @IsString()
   @IsOptional()
   token?: string;
+
+  @OneToMany('BlogPost', 'author')
+  blogPosts?: BlogPost[];
 
   @BeforeInsert()
   @BeforeUpdate()
