@@ -18,4 +18,10 @@ export class UserResolver {
   ) {
     return this.userService.update(user, input);
   }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  async removeUser(@CurrentUser() user: User) {
+    return this.userService.remove(user);
+  }
 }
