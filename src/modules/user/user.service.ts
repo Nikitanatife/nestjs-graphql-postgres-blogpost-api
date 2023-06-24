@@ -12,11 +12,11 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async createUser(input: CreateUserInput) {
+  async create(input: CreateUserInput) {
     return this.userRepository.save(input);
   }
 
-  async getById(id: number) {
+  async ensureUser(id: number) {
     const user = await this.userRepository.findOne({ where: { id } });
 
     if (!user) {
@@ -26,13 +26,24 @@ export class UserService {
     return user;
   }
 
+  async getById(id: number) {
+    return this.ensureUser(id);
+  }
+
   async getOne(options: FindOneOptions<User>) {
     return this.userRepository.findOne(options);
   }
 
   async update(id: number, input: UpdateUserInput) {
-    const user = await this.getById(id);
+    const user = await this.ensureUser(id);
 
     return this.userRepository.save({ ...user, ...input });
+  }
+
+  async remove(id: number) {
+    await this.ensureUser(id);
+    await this.userRepository.delete(id);
+
+    return true;
   }
 }

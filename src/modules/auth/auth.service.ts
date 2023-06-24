@@ -26,7 +26,7 @@ export class AuthService {
     const salt = await genSalt(10);
     const hashedPassword = await hash(password, salt);
 
-    user = await this.userService.createUser({
+    user = await this.userService.create({
       ...input,
       password: hashedPassword,
     });

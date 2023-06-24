@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate {
       }
 
       const { userId } = this.jwtService.verify(token);
-      const user = await this.userService.getById(userId);
+      const user = await this.userService.getOne({ where: { id: userId } });
 
       if (!user || !user.token || token !== user.token) {
         throw new UnauthorizedException('Unauthorized');
