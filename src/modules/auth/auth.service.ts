@@ -1,19 +1,27 @@
 import {
   BadRequestException,
   ConflictException,
+  forwardRef,
+  Inject,
   Injectable,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { compare, genSalt, hash } from 'bcryptjs';
 import { User, UserService } from '../user';
 import { CreateUserInput, LoginInput } from './inputs';
-import { genSalt, hash, compare } from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
+
+  private async getHashedPassword(password: string) {
+    const salt = await genSalt(10);
+    return hash(password, salt);
+  }
 
   async register(input: CreateUserInput) {
     const { email, password } = input;
@@ -23,8 +31,7 @@ export class AuthService {
       throw new ConflictException('Email already exists');
     }
 
-    const salt = await genSalt(10);
-    const hashedPassword = await hash(password, salt);
+    const hashedPassword = await this.getHashedPassword(password);
 
     user = await this.userService.create({
       ...input,
@@ -32,7 +39,7 @@ export class AuthService {
     });
     const token = await this.jwtService.signAsync({ id: user.id });
 
-    user = await this.userService.update(user.id, { token });
+    user = await this.userService.update(user, { token });
 
     return user;
   }
@@ -53,13 +60,21 @@ export class AuthService {
 
     const token = await this.jwtService.signAsync({ id: user.id });
 
-    user = await this.userService.update(user.id, { token });
+    user = await this.userService.update(user, { token });
 
     return user;
   }
 
   async logout(user: User) {
-    await this.userService.update(user.id, { token: null });
+    await this.userService.update(user, { token: null });
+
+    return true;
+  }
+
+  async changePassword(user: User, password: string) {
+    const hashedPassword = await this.getHashedPassword(password);
+
+    await this.userService.update(user, { password: hashedPassword });
 
     return true;
   }

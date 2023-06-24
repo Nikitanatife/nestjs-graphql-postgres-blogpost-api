@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 import { CreateUserInput } from '../auth/inputs';
@@ -16,33 +16,34 @@ export class UserService {
     return this.userRepository.save(input);
   }
 
-  async ensureUser(id: number) {
-    const user = await this.userRepository.findOne({ where: { id } });
+  // TODO: remove this
+  // async ensureUser(id: number) {
+  //   const user = await this.userRepository.findOne({
+  //     where: { id: Equal(id) },
+  //   });
+  //
+  //   if (!user) {
+  //     throw new NotFoundException('User not found');
+  //   }
+  //
+  //   return user;
+  // }
 
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    return user;
-  }
-
-  async getById(id: number) {
-    return this.ensureUser(id);
-  }
+  // TODO: remove this
+  // async getById(id: number) {
+  //   return this.ensureUser(id);
+  // }
 
   async getOne(options: FindOneOptions<User>) {
     return this.userRepository.findOne(options);
   }
 
-  async update(id: number, input: UpdateUserInput) {
-    const user = await this.ensureUser(id);
-
+  async update(user: User, input: UpdateUserInput) {
     return this.userRepository.save({ ...user, ...input });
   }
 
-  async remove(id: number) {
-    await this.ensureUser(id);
-    await this.userRepository.delete(id);
+  async remove(user: User) {
+    await this.userRepository.delete(user.id);
 
     return true;
   }

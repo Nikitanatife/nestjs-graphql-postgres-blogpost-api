@@ -1,17 +1,21 @@
 import {
   CanActivate,
   ExecutionContext,
+  forwardRef,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
+import { UNAUTHORIZED_ERROR } from '../../../shared/const';
 import { UserService } from '../../user';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
   ) {}
 
@@ -28,14 +32,19 @@ export class AuthGuard implements CanActivate {
 
     try {
       if (bearer !== 'Bearer' || !token) {
-        throw new UnauthorizedException('Unauthorized');
+        throw new UnauthorizedException(UNAUTHORIZED_ERROR);
       }
 
-      const { userId } = this.jwtService.verify(token);
-      const user = await this.userService.getOne({ where: { id: userId } });
+      const { id } = this.jwtService.verify(token);
+
+      if (!id) {
+        throw new UnauthorizedException(UNAUTHORIZED_ERROR);
+      }
+
+      const user = await this.userService.getOne({ where: { id } });
 
       if (!user || !user.token || token !== user.token) {
-        throw new UnauthorizedException('Unauthorized');
+        throw new UnauthorizedException(UNAUTHORIZED_ERROR);
       }
 
       req.user = user;

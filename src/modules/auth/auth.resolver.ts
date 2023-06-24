@@ -3,7 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from '../../shared/decorators';
 import { User } from '../user';
 import { AuthGuard } from './guards';
-import { CreateUserInput, LoginInput } from './inputs';
+import { ChangePasswordInput, CreateUserInput, LoginInput } from './inputs';
 import { AuthService } from './auth.service';
 
 @Resolver('Auth')
@@ -18,6 +18,15 @@ export class AuthResolver {
   @Mutation(() => User)
   async login(@Args('loginInput') input: LoginInput) {
     return this.authService.login(input);
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  async changePassword(
+    @Args('changePasswordInput') { password }: ChangePasswordInput,
+    @CurrentUser() user: User,
+  ) {
+    return this.authService.changePassword(user, password);
   }
 
   @UseGuards(AuthGuard)
