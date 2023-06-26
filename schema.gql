@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type Blog {
-  content: String!
+  author: User!
   createdAt: DateTime!
   description: String!
   id: ID!
@@ -16,7 +16,6 @@ input ChangePasswordInput {
 }
 
 input CreateBlogInput {
-  content: String!
   description: String!
   title: String!
 }
@@ -55,7 +54,6 @@ type Query {
 }
 
 input UpdateBlogInput {
-  content: String
   description: String
   id: Int!
   title: String
@@ -68,6 +66,7 @@ input UpdateUserInput {
 }
 
 type User {
+  blogs: [Blog!]
   createdAt: DateTime!
   email: String!
   firstName: String!

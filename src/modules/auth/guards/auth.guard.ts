@@ -9,7 +9,7 @@ import {
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { UNAUTHORIZED_ERROR } from '../../../shared/const';
-import { UserService } from '../../user';
+import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

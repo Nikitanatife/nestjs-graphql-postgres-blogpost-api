@@ -10,8 +10,4 @@ export class CreateBlogInput {
   @Field()
   @IsNotEmpty()
   description: string;
-
-  @Field()
-  @IsNotEmpty()
-  content: string;
 }

@@ -4,15 +4,13 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLError } from 'graphql';
 import { configService } from './config';
-import { AuthModule } from './modules/auth';
-import { UserModule } from './modules/user';
+import { AuthModule } from './modules/auth/auth.module';
 import { BlogModule } from './modules/blog/blog.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      useFactory: async () => configService.getDbConfig(),
-    }),
+    TypeOrmModule.forRoot(configService.getDbConfig()),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: 'schema.gql',
       driver: ApolloDriver,

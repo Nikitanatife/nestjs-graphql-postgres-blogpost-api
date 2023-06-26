@@ -7,7 +7,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcryptjs';
-import { User, UserService } from '../user';
+import { User } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
 import { CreateUserInput, LoginInput } from './inputs';
 
 @Injectable()

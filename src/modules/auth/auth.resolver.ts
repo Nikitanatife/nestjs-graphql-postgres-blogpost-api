@@ -1,10 +1,10 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from '../../shared/decorators';
-import { User } from '../user';
+import { User } from '../user/entities/user.entity';
+import { AuthService } from './auth.service';
 import { AuthGuard } from './guards';
 import { ChangePasswordInput, CreateUserInput, LoginInput } from './inputs';
-import { AuthService } from './auth.service';
 
 @Resolver('Auth')
 export class AuthResolver {
