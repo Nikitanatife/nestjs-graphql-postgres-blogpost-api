@@ -2,8 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Blog {
+  content: String!
+  createdAt: DateTime!
+  description: String!
+  id: ID!
+  title: String!
+  updatedAt: DateTime!
+}
+
 input ChangePasswordInput {
   password: String!
+}
+
+input CreateBlogInput {
+  content: String!
+  description: String!
+  title: String!
 }
 
 input CreateUserInput {
@@ -25,14 +40,25 @@ input LoginInput {
 
 type Mutation {
   changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
+  createBlog(createBlogInput: CreateBlogInput!): Blog!
   login(loginInput: LoginInput!): User!
   register(registerInput: CreateUserInput!): User!
+  removeBlog(id: Int!): Boolean!
   removeUser: Boolean!
+  updateBlog(updateBlogInput: UpdateBlogInput!): Blog!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Query {
+  blog(id: Int!): Blog!
   logout: Boolean!
+}
+
+input UpdateBlogInput {
+  content: String
+  description: String
+  id: Int!
+  title: String
 }
 
 input UpdateUserInput {

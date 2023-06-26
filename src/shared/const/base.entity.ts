@@ -1,5 +1,8 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { validateOrReject } from 'class-validator';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -18,4 +21,10 @@ export class LocalBaseEntity {
   @Field()
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async validate() {
+    await validateOrReject(this);
+  }
 }

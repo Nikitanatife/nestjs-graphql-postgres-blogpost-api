@@ -4,15 +4,14 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLError } from 'graphql';
 import { configService } from './config';
-import { UserModule } from './modules/user';
 import { AuthModule } from './modules/auth';
-// import { BlogModule } from './modules/blog/blog.module';
-import { BlogPostModule } from './modules/blog-post/blog-post.module';
+import { UserModule } from './modules/user';
+import { BlogModule } from './modules/blog/blog.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      useFactory: async () => configService.getTypeOrmOptions(),
+      useFactory: async () => configService.getDbConfig(),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: 'schema.gql',
@@ -28,7 +27,7 @@ import { BlogPostModule } from './modules/blog-post/blog-post.module';
 
         return {
           message: `${
-            error.extensions?.status || originalError.statusCode || 500
+            error.extensions?.status || originalError?.statusCode || 500
           } ${
             originalError?.error || 'Internal server error'
           }: ${JSON.stringify(
@@ -41,8 +40,7 @@ import { BlogPostModule } from './modules/blog-post/blog-post.module';
     }),
     UserModule,
     AuthModule,
-    // BlogModule,
-    BlogPostModule,
+    BlogModule,
   ],
   controllers: [],
   providers: [],
