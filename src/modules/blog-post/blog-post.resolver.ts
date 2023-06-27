@@ -1,8 +1,17 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { CurrentUser } from '../../shared/decorators';
 import { IdValidationPipe } from '../../shared/pipes';
 import { AuthGuard } from '../auth/guards';
+import { Blog } from '../blog/entities/blog.entity';
 import { User } from '../user/entities/user.entity';
 import { BlogPostService } from './blog-post.service';
 import { CreateBlogPostInput } from './dto/create-blog-post.input';
@@ -15,7 +24,7 @@ export class BlogPostResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => BlogPost)
-  createBlogPost(
+  async createBlogPost(
     @CurrentUser() user: User,
     @Args('createBlogPostInput') createBlogPostInput: CreateBlogPostInput,
   ) {
@@ -23,14 +32,14 @@ export class BlogPostResolver {
   }
 
   @Query(() => [BlogPost])
-  findAllBlogPostsByBlogId(
+  async findAllBlogPostsByBlogId(
     @Args('blogId', { type: () => Int }, IdValidationPipe) blogId: number,
   ) {
     return this.blogPostService.findAllByBlogId(blogId);
   }
 
   @Query(() => BlogPost)
-  findBlogPostById(
+  async findBlogPostById(
     @Args('id', { type: () => Int }, IdValidationPipe) id: number,
   ) {
     return this.blogPostService.findById(id);
@@ -38,7 +47,7 @@ export class BlogPostResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => BlogPost)
-  updateBlogPost(
+  async updateBlogPost(
     @Args('updateBlogPostInput') updateBlogPostInput: UpdateBlogPostInput,
   ) {
     return this.blogPostService.update(updateBlogPostInput);
@@ -46,9 +55,19 @@ export class BlogPostResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  removeBlogPost(
+  async removeBlogPost(
     @Args('id', { type: () => Int }, IdValidationPipe) id: number,
   ) {
     return this.blogPostService.remove(id);
+  }
+
+  @ResolveField(() => Blog)
+  async blog(@Parent() blogPost: BlogPost) {
+    return this.blogPostService.findBlog(blogPost.blogId);
+  }
+
+  @ResolveField(() => User)
+  async author(@Parent() blog: Blog) {
+    return this.blogPostService.findAuthor(blog.authorId);
   }
 }

@@ -68,4 +68,12 @@ export class BlogPostService {
 
     return Boolean(blogPost);
   }
+
+  async findBlog(blogId: number) {
+    return this.blogService.findById(blogId);
+  }
+
+  async findAuthor(authorId: number) {
+    return this.blogService.findAuthor(authorId);
+  }
 }

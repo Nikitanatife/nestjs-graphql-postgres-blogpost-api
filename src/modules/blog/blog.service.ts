@@ -5,6 +5,7 @@ import {
   AUTHOR_NOT_FOUND_ERROR,
   BLOG_NOT_FOUND_ERROR,
 } from '../../shared/const';
+import { BlogPost } from '../blog-post/entities/blog-post.entity';
 import { User } from '../user/entities/user.entity';
 import { CreateBlogInput } from './dto/create-blog.input';
 import { UpdateBlogInput } from './dto/update-blog.input';
@@ -80,5 +81,14 @@ export class BlogService {
     }
 
     return author;
+  }
+
+  async findBlogPosts(id: number) {
+    return this.blogRepository
+      .createQueryBuilder()
+      .select('blogPost')
+      .from(BlogPost, 'blogPost')
+      .where('blogPost.blogId = :id', { id })
+      .getMany();
   }
 }

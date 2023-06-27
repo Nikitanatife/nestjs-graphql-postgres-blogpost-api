@@ -11,6 +11,7 @@ import {
 import { CurrentUser } from '../../shared/decorators';
 import { IdValidationPipe } from '../../shared/pipes';
 import { AuthGuard } from '../auth/guards';
+import { BlogPost } from '../blog-post/entities/blog-post.entity';
 import { User } from '../user/entities/user.entity';
 import { BlogService } from './blog.service';
 import { CreateBlogInput } from './dto/create-blog.input';
@@ -62,5 +63,10 @@ export class BlogResolver {
   @ResolveField(() => User)
   async author(@Parent() blog: Blog) {
     return this.blogService.findAuthor(blog.authorId);
+  }
+
+  @ResolveField(() => [BlogPost])
+  async blogPosts(@Parent() blog: Blog) {
+    return this.blogService.findBlogPosts(blog.id);
   }
 }
