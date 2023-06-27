@@ -72,7 +72,7 @@ type Mutation {
 
 type Query {
   findAllBlogPostsByBlogId(blogId: Int!): [BlogPost!]!
-  findAllBlogs: [Blog!]!
+  findAllBlogs(authorId: Int): [Blog!]!
   findBlogById(id: Int!): Blog!
   findBlogPostById(id: Int!): BlogPost!
   logout: Boolean!

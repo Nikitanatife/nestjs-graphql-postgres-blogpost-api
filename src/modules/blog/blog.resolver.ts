@@ -31,8 +31,11 @@ export class BlogResolver {
   }
 
   @Query(() => [Blog])
-  async findAllBlogs() {
-    return this.blogService.findAll();
+  async findAllBlogs(
+    @Args('authorId', { type: () => Int, nullable: true })
+    authorId?: number,
+  ) {
+    return this.blogService.findAll(authorId);
   }
 
   @Query(() => Blog)

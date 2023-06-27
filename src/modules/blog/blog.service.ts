@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equal, Repository } from 'typeorm';
+import { Equal, FindManyOptions, Repository } from 'typeorm';
 import {
   AUTHOR_NOT_FOUND_ERROR,
   BLOG_NOT_FOUND_ERROR,
@@ -26,8 +26,14 @@ export class BlogService {
     return this.blogRepository.save(blog);
   }
 
-  async findAll() {
-    return this.blogRepository.find();
+  async findAll(authorId?: number) {
+    const options: FindManyOptions = {};
+
+    if (authorId) {
+      options.where = { authorId: Equal(authorId) };
+    }
+
+    return this.blogRepository.find(options);
   }
 
   async findById(id: number) {
