@@ -1,13 +1,22 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { IsEmail, IsOptional, IsString, Matches } from 'class-validator';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  Matches,
+} from 'class-validator';
 import { Column, Entity, OneToMany } from 'typeorm';
 import {
   LocalBaseEntity,
   PASSWORD_REGEX,
   USER_NAME_REGEX,
+  UserRoles,
 } from '../../../shared/const';
 import { BlogPost } from '../../blog-post/entities/blog-post.entity';
 import { Blog } from '../../blog/entities/blog.entity';
+
+registerEnumType(UserRoles, { name: 'UserRoles' });
 
 @Entity()
 @ObjectType()
@@ -30,6 +39,12 @@ export class User extends LocalBaseEntity {
   @Column()
   @Matches(PASSWORD_REGEX)
   password: string;
+
+  @Column({ type: 'enum', enum: UserRoles, default: UserRoles.WRITER })
+  @Field(() => UserRoles, { defaultValue: UserRoles.WRITER })
+  @IsEnum(UserRoles)
+  @IsOptional()
+  role: UserRoles;
 
   @Column({ nullable: true })
   @Field({ nullable: true })

@@ -44,6 +44,7 @@ input CreateUserInput {
   firstName: String!
   lastName: String!
   password: String!
+  role: UserRoles! = WRITER
 }
 
 """
@@ -105,6 +106,12 @@ type User {
   firstName: String!
   id: ID!
   lastName: String!
+  role: UserRoles!
   token: String
   updatedAt: DateTime!
+}
+
+enum UserRoles {
+  MODERATOR
+  WRITER
 }
