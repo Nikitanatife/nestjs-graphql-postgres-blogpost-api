@@ -25,6 +25,7 @@ export class UserResolver {
     return this.userService.remove(user);
   }
 
+  // TODO: fix or delete
   // @UseGuards(AuthGuard)
   // @Query(() => User)
   // async me(@CurrentUser() user: User) {

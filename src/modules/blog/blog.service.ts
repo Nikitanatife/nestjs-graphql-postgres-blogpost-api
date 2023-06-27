@@ -49,9 +49,16 @@ export class BlogService {
   }
 
   async remove(id: number) {
+    await this.ensureBlog(id);
     await this.blogRepository.delete(id);
 
     return true;
+  }
+
+  async ensureBlog(blogId: number) {
+    const blog = await this.findById(blogId);
+
+    return Boolean(blog);
   }
 
   async findAuthor(id: number) {

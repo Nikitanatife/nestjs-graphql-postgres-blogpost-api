@@ -9,6 +9,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { CurrentUser } from '../../shared/decorators';
+import { IdValidationPipe } from '../../shared/pipes';
 import { AuthGuard } from '../auth/guards';
 import { User } from '../user/entities/user.entity';
 import { BlogService } from './blog.service';
@@ -35,7 +36,9 @@ export class BlogResolver {
   }
 
   @Query(() => Blog)
-  async findBlogById(@Args('id', { type: () => Int }) id: number) {
+  async findBlogById(
+    @Args('id', { type: () => Int }, IdValidationPipe) id: number,
+  ) {
     return this.blogService.findById(id);
   }
 
@@ -47,7 +50,9 @@ export class BlogResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  async removeBlog(@Args('id', { type: () => Int }) id: number) {
+  async removeBlog(
+    @Args('id', { type: () => Int }, IdValidationPipe) id: number,
+  ) {
     return this.blogService.remove(id);
   }
 

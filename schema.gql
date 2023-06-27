@@ -4,6 +4,18 @@
 
 type Blog {
   author: User!
+  blogPosts: [BlogPost!]!
+  createdAt: DateTime!
+  description: String!
+  id: ID!
+  title: String!
+  updatedAt: DateTime!
+}
+
+type BlogPost {
+  author: User!
+  blog: Blog!
+  content: String!
   createdAt: DateTime!
   description: String!
   id: ID!
@@ -16,6 +28,13 @@ input ChangePasswordInput {
 }
 
 input CreateBlogInput {
+  description: String!
+  title: String!
+}
+
+input CreateBlogPostInput {
+  blogId: Int!
+  content: String!
   description: String!
   title: String!
 }
@@ -40,21 +59,33 @@ input LoginInput {
 type Mutation {
   changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
   createBlog(createBlogInput: CreateBlogInput!): Blog!
+  createBlogPost(createBlogPostInput: CreateBlogPostInput!): BlogPost!
   login(loginInput: LoginInput!): User!
   register(registerInput: CreateUserInput!): User!
   removeBlog(id: Int!): Boolean!
+  removeBlogPost(id: Int!): Boolean!
   removeUser: Boolean!
   updateBlog(updateBlogInput: UpdateBlogInput!): Blog!
+  updateBlogPost(updateBlogPostInput: UpdateBlogPostInput!): BlogPost!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Query {
+  findAllBlogPostsByBlogId(blogId: Int!): [BlogPost!]!
   findAllBlogs: [Blog!]!
   findBlogById(id: Int!): Blog!
+  findBlogPostById(id: Int!): BlogPost!
   logout: Boolean!
 }
 
 input UpdateBlogInput {
+  description: String
+  id: Int!
+  title: String
+}
+
+input UpdateBlogPostInput {
+  content: String
   description: String
   id: Int!
   title: String
@@ -67,6 +98,7 @@ input UpdateUserInput {
 }
 
 type User {
+  blogPosts: [BlogPost!]
   blogs: [Blog!]
   createdAt: DateTime!
   email: String!

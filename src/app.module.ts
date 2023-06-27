@@ -7,6 +7,7 @@ import { configService } from './config';
 import { AuthModule } from './modules/auth/auth.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { UserModule } from './modules/user/user.module';
+import { BlogPostModule } from './modules/blog-post/blog-post.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { UserModule } from './modules/user/user.module';
     UserModule,
     AuthModule,
     BlogModule,
+    BlogPostModule,
   ],
   controllers: [],
   providers: [],

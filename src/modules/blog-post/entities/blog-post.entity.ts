@@ -1,13 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IsNotEmpty, IsPositive } from 'class-validator';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { LocalBaseEntity } from '../../../shared/const';
-import { BlogPost } from '../../blog-post/entities/blog-post.entity';
+import { Blog } from '../../blog/entities/blog.entity';
 import { User } from '../../user/entities/user.entity';
 
 @Entity()
 @ObjectType()
-export class Blog extends LocalBaseEntity {
+export class BlogPost extends LocalBaseEntity {
   @Column()
   @Field()
   @IsNotEmpty()
@@ -18,8 +18,20 @@ export class Blog extends LocalBaseEntity {
   @IsNotEmpty()
   description: string;
 
+  @Column()
+  @Field()
+  @IsNotEmpty()
+  content: string;
+
+  @Field(() => Blog)
+  @ManyToOne(() => Blog, (blog) => blog.blogPosts, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  blog: Blog;
+
   @Field(() => User)
-  @ManyToOne(() => User, (author) => author.blogs, {
+  @ManyToOne(() => User, (author) => author.blogPosts, {
     nullable: false,
     onDelete: 'CASCADE',
   })
@@ -30,7 +42,8 @@ export class Blog extends LocalBaseEntity {
   @IsNotEmpty()
   authorId: number;
 
-  @Field(() => [BlogPost])
-  @OneToMany(() => BlogPost, (blogPost) => blogPost.blog, { nullable: true })
-  blogPosts?: BlogPost[];
+  @Column()
+  @IsPositive()
+  @IsNotEmpty()
+  blogId: number;
 }

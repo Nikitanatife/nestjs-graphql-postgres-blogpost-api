@@ -6,6 +6,7 @@ import {
   PASSWORD_REGEX,
   USER_NAME_REGEX,
 } from '../../../shared/const';
+import { BlogPost } from '../../blog-post/entities/blog-post.entity';
 import { Blog } from '../../blog/entities/blog.entity';
 
 @Entity()
@@ -39,4 +40,8 @@ export class User extends LocalBaseEntity {
   @Field(() => [Blog], { nullable: true })
   @OneToMany(() => Blog, (blog) => blog.author)
   blogs?: Blog[];
+
+  @Field(() => [BlogPost], { nullable: true })
+  @OneToMany(() => BlogPost, (blogPost) => blogPost.author)
+  blogPosts?: BlogPost[];
 }
