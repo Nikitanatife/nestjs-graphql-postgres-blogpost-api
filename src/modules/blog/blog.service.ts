@@ -42,8 +42,10 @@ export class BlogService {
     return blog;
   }
 
-  async update(id: number, updateBlogInput: UpdateBlogInput) {
-    return this.blogRepository.update(id, updateBlogInput);
+  async update(updateBlogInput: UpdateBlogInput) {
+    const blog = await this.findById(updateBlogInput.id);
+
+    return this.blogRepository.save({ ...blog, ...updateBlogInput });
   }
 
   async remove(id: number) {

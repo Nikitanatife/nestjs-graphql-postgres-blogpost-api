@@ -42,7 +42,7 @@ export class BlogResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => Blog)
   async updateBlog(@Args('updateBlogInput') updateBlogInput: UpdateBlogInput) {
-    return this.blogService.update(updateBlogInput.id, updateBlogInput);
+    return this.blogService.update(updateBlogInput);
   }
 
   @UseGuards(AuthGuard)

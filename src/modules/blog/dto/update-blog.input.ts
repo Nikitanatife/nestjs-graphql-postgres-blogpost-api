@@ -1,8 +1,11 @@
+import { Field, InputType, Int, PartialType } from '@nestjs/graphql';
+import { IsInt, IsNotEmpty } from 'class-validator';
 import { CreateBlogInput } from './create-blog.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateBlogInput extends PartialType(CreateBlogInput) {
   @Field(() => Int)
+  @IsInt()
+  @IsNotEmpty()
   id: number;
 }

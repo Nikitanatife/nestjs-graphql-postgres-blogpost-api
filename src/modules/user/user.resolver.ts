@@ -1,15 +1,7 @@
 import { UseGuards } from '@nestjs/common';
-import {
-  Args,
-  Mutation,
-  // Parent,
-  // Query,
-  // ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from '../../shared/decorators';
 import { AuthGuard } from '../auth/guards';
-// import { Blog } from '../blog/entities/blog.entity';
 import { User } from './entities/user.entity';
 import { UpdateUserInput } from './inputs';
 import { UserService } from './user.service';
