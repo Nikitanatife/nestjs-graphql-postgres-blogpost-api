@@ -1,6 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equal, Repository } from 'typeorm';
+import {
+  AUTHOR_NOT_FOUND_ERROR,
+  BLOG_NOT_FOUND_ERROR,
+} from '../../shared/const';
+import { User } from '../user/entities/user.entity';
 import { CreateBlogInput } from './dto/create-blog.input';
 import { UpdateBlogInput } from './dto/update-blog.input';
 import { Blog } from './entities/blog.entity';
@@ -12,8 +17,13 @@ export class BlogService {
     private blogRepository: Repository<Blog>,
   ) {}
 
-  async create(createBlogInput: CreateBlogInput) {
-    return this.blogRepository.save(createBlogInput);
+  async create(user: User, createBlogInput: CreateBlogInput) {
+    const blog = await this.blogRepository.create({
+      ...createBlogInput,
+      author: user,
+    });
+
+    return this.blogRepository.save(blog);
   }
 
   async findAll() {
@@ -26,7 +36,7 @@ export class BlogService {
     });
 
     if (!blog) {
-      throw new NotFoundException('Blog not found');
+      throw new NotFoundException(BLOG_NOT_FOUND_ERROR);
     }
 
     return blog;
@@ -40,5 +50,20 @@ export class BlogService {
     await this.blogRepository.delete(id);
 
     return true;
+  }
+
+  async findAuthor(id: number) {
+    const author = await this.blogRepository
+      .createQueryBuilder()
+      .select('user')
+      .from(User, 'user')
+      .where('user.id = :id', { id })
+      .getOne();
+
+    if (!author) {
+      throw new NotFoundException(AUTHOR_NOT_FOUND_ERROR);
+    }
+
+    return author;
   }
 }

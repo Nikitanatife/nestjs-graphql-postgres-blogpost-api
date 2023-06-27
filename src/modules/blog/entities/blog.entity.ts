@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { LocalBaseEntity } from '../../../shared/const';
 import { User } from '../../user/entities/user.entity';
@@ -23,4 +23,9 @@ export class Blog extends LocalBaseEntity {
     onDelete: 'CASCADE',
   })
   author: User;
+
+  @Column()
+  @IsInt()
+  @IsNotEmpty()
+  authorId: number;
 }
