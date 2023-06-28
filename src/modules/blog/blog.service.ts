@@ -5,6 +5,7 @@ import {
   AUTHOR_NOT_FOUND_ERROR,
   BLOG_NOT_FOUND_ERROR,
 } from '../../shared/const';
+import { checkUserRole } from '../../shared/utils';
 import { BlogPost } from '../blog-post/entities/blog-post.entity';
 import { User } from '../user/entities/user.entity';
 import { CreateBlogInput } from './dto/create-blog.input';
@@ -49,14 +50,19 @@ export class BlogService {
     return blog;
   }
 
-  async update(updateBlogInput: UpdateBlogInput) {
+  async update(user: User, updateBlogInput: UpdateBlogInput) {
     const blog = await this.findById(updateBlogInput.id);
+
+    checkUserRole(user, blog);
 
     return this.blogRepository.save({ ...blog, ...updateBlogInput });
   }
 
-  async remove(id: number) {
-    await this.ensureBlog(id);
+  async remove(user: User, id: number) {
+    const blog = await this.findById(id);
+
+    checkUserRole(user, blog);
+
     await this.blogRepository.delete(id);
 
     return true;

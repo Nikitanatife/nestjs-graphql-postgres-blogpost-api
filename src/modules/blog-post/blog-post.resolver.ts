@@ -49,16 +49,18 @@ export class BlogPostResolver {
   @Mutation(() => BlogPost)
   async updateBlogPost(
     @Args('updateBlogPostInput') updateBlogPostInput: UpdateBlogPostInput,
+    @CurrentUser() user: User,
   ) {
-    return this.blogPostService.update(updateBlogPostInput);
+    return this.blogPostService.update(user, updateBlogPostInput);
   }
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   async removeBlogPost(
     @Args('id', { type: () => Int }, IdValidationPipe) id: number,
+    @CurrentUser() user: User,
   ) {
-    return this.blogPostService.remove(id);
+    return this.blogPostService.remove(user, id);
   }
 
   @ResolveField(() => Blog)

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equal, Repository } from 'typeorm';
 import { BLOG_POST_NOT_FOUND_ERROR } from '../../shared/const';
+import { checkUserRole } from '../../shared/utils';
 import { BlogService } from '../blog/blog.service';
 import { User } from '../user/entities/user.entity';
 import { CreateBlogPostInput } from './dto/create-blog-post.input';
@@ -17,7 +18,9 @@ export class BlogPostService {
   ) {}
 
   async create(user: User, createBlogPostInput: CreateBlogPostInput) {
-    await this.blogService.ensureBlog(createBlogPostInput.blogId);
+    const blog = await this.blogService.findById(createBlogPostInput.blogId);
+
+    checkUserRole(user, blog);
 
     const blogPost = await this.blogPostRepository.create({
       ...createBlogPostInput,
@@ -47,8 +50,10 @@ export class BlogPostService {
     return blogPost;
   }
 
-  async update(updateBlogPostInput: UpdateBlogPostInput) {
+  async update(user: User, updateBlogPostInput: UpdateBlogPostInput) {
     const blogPost = await this.findById(updateBlogPostInput.id);
+
+    checkUserRole(user, blogPost);
 
     return this.blogPostRepository.save({
       ...blogPost,
@@ -56,17 +61,14 @@ export class BlogPostService {
     });
   }
 
-  async remove(id: number) {
-    await this.ensureBlogPost(id);
+  async remove(user: User, id: number) {
+    const blogPost = await this.findById(id);
+
+    checkUserRole(user, blogPost);
+
     await this.blogPostRepository.delete(id);
 
     return true;
-  }
-
-  async ensureBlogPost(id: number) {
-    const blogPost = await this.findById(id);
-
-    return Boolean(blogPost);
   }
 
   async findBlog(blogId: number) {
