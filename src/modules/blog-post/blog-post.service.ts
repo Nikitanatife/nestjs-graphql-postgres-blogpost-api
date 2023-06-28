@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equal, Repository } from 'typeorm';
-import { BLOG_POST_NOT_FOUND_ERROR } from '../../shared/const';
+import { BLOG_POST_NOT_FOUND_ERROR, PaginationArgs } from '../../shared/const';
 import { checkUserRole } from '../../shared/utils';
 import { BlogService } from '../blog/blog.service';
 import { User } from '../user/entities/user.entity';
@@ -30,11 +30,13 @@ export class BlogPostService {
     return this.blogPostRepository.save(blogPost);
   }
 
-  async findAllByBlogId(blogId: number) {
+  async findAllByBlogId(blogId: number, { take, skip }: PaginationArgs) {
     await this.blogService.ensureBlog(blogId);
 
     return this.blogPostRepository.find({
       where: { blogId },
+      take,
+      skip,
     });
   }
 

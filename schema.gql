@@ -4,7 +4,7 @@
 
 type Blog {
   author: User!
-  blogPosts: [BlogPost!]!
+  blogPosts(skip: Int = 0, take: Int = 100): [BlogPost!]!
   createdAt: DateTime!
   description: String!
   id: ID!
@@ -72,8 +72,8 @@ type Mutation {
 }
 
 type Query {
-  findAllBlogPostsByBlogId(blogId: Int!): [BlogPost!]!
-  findAllBlogs(authorId: Int): [Blog!]!
+  findAllBlogPostsByBlogId(blogId: Int!, skip: Int = 0, take: Int = 100): [BlogPost!]!
+  findAllBlogs(authorId: Int, skip: Int = 0, take: Int = 100): [Blog!]!
   findBlogById(id: Int!): Blog!
   findBlogPostById(id: Int!): BlogPost!
   logout: Boolean!

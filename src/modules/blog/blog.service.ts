@@ -4,6 +4,7 @@ import { Equal, FindManyOptions, Repository } from 'typeorm';
 import {
   AUTHOR_NOT_FOUND_ERROR,
   BLOG_NOT_FOUND_ERROR,
+  PaginationArgs,
 } from '../../shared/const';
 import { checkUserRole } from '../../shared/utils';
 import { BlogPost } from '../blog-post/entities/blog-post.entity';
@@ -28,8 +29,8 @@ export class BlogService {
     return this.blogRepository.save(blog);
   }
 
-  async findAll(authorId?: number) {
-    const options: FindManyOptions = {};
+  async findAll({ take, skip }: PaginationArgs, authorId?: number) {
+    const options: FindManyOptions = { take, skip };
 
     if (authorId) {
       options.where = { authorId: Equal(authorId) };
@@ -89,12 +90,14 @@ export class BlogService {
     return author;
   }
 
-  async findBlogPosts(id: number) {
+  async findBlogPosts(id: number, { take, skip }: PaginationArgs) {
     return this.blogRepository
       .createQueryBuilder()
       .select('blogPost')
       .from(BlogPost, 'blogPost')
       .where('blogPost.blogId = :id', { id })
+      .take(take)
+      .skip(skip)
       .getMany();
   }
 }

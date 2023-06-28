@@ -8,6 +8,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { PaginationArgs } from '../../shared/const';
 import { CurrentUser } from '../../shared/decorators';
 import { IdValidationPipe } from '../../shared/pipes';
 import { AuthGuard } from '../auth/guards';
@@ -34,8 +35,9 @@ export class BlogPostResolver {
   @Query(() => [BlogPost])
   async findAllBlogPostsByBlogId(
     @Args('blogId', { type: () => Int }, IdValidationPipe) blogId: number,
+    @Args() pagination: PaginationArgs,
   ) {
-    return this.blogPostService.findAllByBlogId(blogId);
+    return this.blogPostService.findAllByBlogId(blogId, pagination);
   }
 
   @Query(() => BlogPost)

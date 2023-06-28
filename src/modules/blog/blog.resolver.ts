@@ -8,6 +8,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { PaginationArgs } from '../../shared/const';
 import { CurrentUser } from '../../shared/decorators';
 import { IdValidationPipe } from '../../shared/pipes';
 import { AuthGuard } from '../auth/guards';
@@ -33,10 +34,11 @@ export class BlogResolver {
 
   @Query(() => [Blog])
   async findAllBlogs(
+    @Args() pagination: PaginationArgs,
     @Args('authorId', { type: () => Int, nullable: true })
     authorId?: number,
   ) {
-    return this.blogService.findAll(authorId);
+    return this.blogService.findAll(pagination, authorId);
   }
 
   @Query(() => Blog)
@@ -70,7 +72,7 @@ export class BlogResolver {
   }
 
   @ResolveField(() => [BlogPost])
-  async blogPosts(@Parent() blog: Blog) {
-    return this.blogService.findBlogPosts(blog.id);
+  async blogPosts(@Parent() blog: Blog, @Args() pagination: PaginationArgs) {
+    return this.blogService.findBlogPosts(blog.id, pagination);
   }
 }
