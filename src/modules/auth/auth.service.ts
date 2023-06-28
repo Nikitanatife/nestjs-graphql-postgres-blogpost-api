@@ -26,7 +26,7 @@ export class AuthService {
 
   async register(input: CreateUserInput) {
     const { email, password } = input;
-    let user = await this.userService.getOne({ where: { email } });
+    let user = await this.userService.findOne({ where: { email } });
 
     if (user) {
       throw new ConflictException('Email already exists');
@@ -47,7 +47,7 @@ export class AuthService {
 
   async login(input: LoginInput) {
     const { email, password } = input;
-    let user = await this.userService.getOne({ where: { email } });
+    let user = await this.userService.findOne({ where: { email } });
 
     if (!user) {
       throw new BadRequestException('Wrong credentials');

@@ -1,14 +1,21 @@
 import { User } from '../../modules/user/entities/user.entity';
 import { UserRoles } from './user-roles';
 
-export const baseEntity = {
+export const testBaseEntity = {
   id: Date.now(),
   createdAt: new Date(),
   updatedAt: new Date(),
 };
 
+export const testCreateWriterInput = {
+  firstName: 'Test',
+  lastName: 'Test',
+  email: 'test@test.com',
+  role: UserRoles.WRITER,
+};
+
 export const testWriter: User = {
-  ...baseEntity,
+  ...testBaseEntity,
   email: 'test@test.com',
   password: 'test',
   role: UserRoles.WRITER,
@@ -22,7 +29,7 @@ export const testWriter: User = {
 export const testCreateBlogInput = { title: 'new', description: 'new' };
 
 export const testBlog = {
-  ...baseEntity,
+  ...testBaseEntity,
   ...testCreateBlogInput,
 };
 
@@ -33,12 +40,6 @@ export const testCreateBlogPostInput = {
 };
 
 export const testBlogPost = {
-  ...baseEntity,
+  ...testBaseEntity,
   ...testCreateBlogPostInput,
 };
-
-// export const testUpdateBlogInput: UpdateBlogInput = {
-//     id: 1,
-//     title: 'test',
-//     description: 'test',
-// }

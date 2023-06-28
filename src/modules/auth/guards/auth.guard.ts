@@ -41,7 +41,7 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException(UNAUTHORIZED_ERROR);
       }
 
-      const user = await this.userService.getOne({ where: { id } });
+      const user = await this.userService.findOne({ where: { id } });
 
       if (!user || !user.token || token !== user.token) {
         throw new UnauthorizedException(UNAUTHORIZED_ERROR);

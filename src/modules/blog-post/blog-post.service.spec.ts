@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import {
-  baseEntity,
+  testBaseEntity,
   testBlog,
   testBlogPost,
   testCreateBlogPostInput,
@@ -16,7 +16,7 @@ describe('BlogPostService', () => {
   const mockBlogPostRepository = {
     create: jest.fn().mockImplementation((dto) => ({
       ...dto,
-      ...baseEntity,
+      ...testBaseEntity,
     })),
     save: jest.fn().mockImplementation((blogPost) => Promise.resolve(blogPost)),
     findOne: jest.fn().mockImplementation((query) =>
@@ -37,13 +37,16 @@ describe('BlogPostService', () => {
     delete: jest.fn().mockImplementation(() => Promise.resolve(true)),
   };
   const mockBlogService = {
-    findById: jest.fn().mockImplementation((id) => ({
-      ...baseEntity,
-      ...testBlog,
-      id,
-      author: testWriter,
-      authorId: testWriter.id,
-    })),
+    findById: jest.fn().mockImplementation((id) =>
+      Promise.resolve({
+        ...testBaseEntity,
+        ...testBlog,
+        id,
+        author: testWriter,
+        authorId: testWriter.id,
+      }),
+    ),
+    ensureBlog: jest.fn().mockImplementation(() => Promise.resolve(true)),
   };
 
   beforeEach(async () => {

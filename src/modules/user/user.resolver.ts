@@ -24,16 +24,4 @@ export class UserResolver {
   async removeUser(@CurrentUser() user: User) {
     return this.userService.remove(user);
   }
-
-  // TODO: fix or delete
-  // @UseGuards(AuthGuard)
-  // @Query(() => User)
-  // async me(@CurrentUser() user: User) {
-  //   return user;
-  // }
-  //
-  // @ResolveField()
-  // async blogs(@Parent() user: User) {
-  //   return this.userService.findBlogs(user);
-  // }
 }

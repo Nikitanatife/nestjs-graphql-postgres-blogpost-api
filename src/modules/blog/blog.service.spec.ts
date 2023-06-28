@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import {
-  baseEntity,
+  testBaseEntity,
   testBlog,
   testCreateBlogInput,
   testWriter,
@@ -14,7 +14,7 @@ describe('BlogService', () => {
   const mockBlogRepository = {
     create: jest.fn().mockImplementation((dto) => ({
       ...dto,
-      ...baseEntity,
+      ...testBaseEntity,
     })),
     save: jest.fn().mockImplementation((blog) => Promise.resolve(blog)),
     findOne: jest.fn().mockImplementation((query) =>
@@ -75,16 +75,6 @@ describe('BlogService', () => {
   it('find all blogs', async () => {
     expect(await service.findAll({ take: 100, skip: 0 })).toEqual([testBlog]);
   });
-
-  // it('update blog', async () => {
-  //   expect(
-  //     await service.update(testWriter, {
-  //       id: 1,
-  //       title: 'test',
-  //       description: 'test',
-  //     }),
-  //   ).toEqual({});
-  // });
 
   it('remove blog', async () => {
     expect(await service.remove(testWriter, 1)).toEqual(true);
