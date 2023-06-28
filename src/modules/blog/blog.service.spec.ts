@@ -25,6 +25,13 @@ describe('BlogService', () => {
         authorId: testWriter.id,
       }),
     ),
+    find: jest.fn().mockImplementation(() =>
+      Promise.resolve([
+        {
+          ...testBlog,
+        },
+      ]),
+    ),
     delete: jest.fn().mockImplementation(() => Promise.resolve(true)),
   };
 
@@ -63,6 +70,10 @@ describe('BlogService', () => {
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     });
+  });
+
+  it('find all blogs', async () => {
+    expect(await service.findAll({ take: 100, skip: 0 })).toEqual([testBlog]);
   });
 
   // it('update blog', async () => {

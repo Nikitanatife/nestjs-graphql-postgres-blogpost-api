@@ -26,6 +26,17 @@ export const testBlog = {
   ...testCreateBlogInput,
 };
 
+export const testCreateBlogPostInput = {
+  ...testCreateBlogInput,
+  content: 'test',
+  blogId: 1,
+};
+
+export const testBlogPost = {
+  ...baseEntity,
+  ...testCreateBlogPostInput,
+};
+
 // export const testUpdateBlogInput: UpdateBlogInput = {
 //     id: 1,
 //     title: 'test',
