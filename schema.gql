@@ -76,6 +76,7 @@ type Query {
   findAllBlogs(authorId: Int, skip: Int = 0, take: Int = 100): [Blog!]!
   findBlogById(id: Int!): Blog!
   findBlogPostById(id: Int!): BlogPost!
+  healthCheck: Boolean!
   logout: Boolean!
 }
 

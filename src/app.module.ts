@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLError } from 'graphql';
+import { AppResolver } from './app.resolver';
 import { configService } from './config';
 import { AuthModule } from './modules/auth/auth.module';
 import { BlogModule } from './modules/blog/blog.module';
@@ -42,7 +43,6 @@ import { BlogPostModule } from './modules/blog-post/blog-post.module';
     BlogModule,
     BlogPostModule,
   ],
-  controllers: [],
-  providers: [],
+  providers: [AppResolver],
 })
 export class AppModule {}
