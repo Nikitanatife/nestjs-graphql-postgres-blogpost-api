@@ -28,6 +28,10 @@ class ConfigService {
     return +this.getValue('PORT', false) || 3000;
   }
 
+  getNodeEnv(): string {
+    return this.getValue('NODE_ENV', false) || 'development';
+  }
+
   getValidationOptions(transform?: true): ValidationPipeOptions {
     const options: ValidationPipeOptions = {
       whitelist: true,
@@ -52,12 +56,21 @@ class ConfigService {
   getDbConfig(): DataSourceOptions {
     return {
       type: 'postgres',
-      port: parseInt(this.getValue('POSTGRES_PORT')),
+      port:
+        this.getNodeEnv() === 'test'
+          ? parseInt(this.getValue('POSTGRES_TEST_PORT'))
+          : parseInt(this.getValue('POSTGRES_PORT')),
       username: this.getValue('POSTGRES_USER'),
       password: this.getValue('POSTGRES_PASSWORD'),
       database: this.getValue('POSTGRES_DB'),
-      entities: ['dist/modules/**/*.entity.js'],
-      migrations: ['dist/migrations/*.js'],
+      entities:
+        this.getNodeEnv() === 'test'
+          ? ['src/modules/**/*.entity.ts']
+          : ['dist/modules/**/*.entity.js'],
+      migrations:
+        this.getNodeEnv() === 'test'
+          ? ['src/migrations/*.ts']
+          : ['dist/migrations/*.js'],
       migrationsTableName: 'migrations_typeorm',
       migrationsRun: true,
       logging: true,
