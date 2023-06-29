@@ -1,6 +1,6 @@
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Blog API built with NestJS, GraphQL TypeORM, and PostgreSQL.
 
 ## Installation
 
@@ -12,6 +12,12 @@ $ npm install
 
 See `.env.example` for a list of environment variables that need to be set in `.env` file.
 
+## Migrations
+
+```bash
+$ npm run migration:run
+```
+
 ## Running the app
 
 ```bash
@@ -21,8 +27,8 @@ $ npm run start
 # watch mode
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
+# Docker
+$ docker-compose up -d
 ```
 
 ## Test
@@ -33,9 +39,6 @@ $ npm run test
 
 # e2e tests
 $ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
 ## License
