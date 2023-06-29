@@ -60,6 +60,7 @@ class ConfigService {
         this.getNodeEnv() === 'test'
           ? parseInt(this.getValue('POSTGRES_TEST_PORT'))
           : parseInt(this.getValue('POSTGRES_PORT')),
+      host: this.getValue('POSTGRES_HOST') || 'localhost',
       username: this.getValue('POSTGRES_USER'),
       password: this.getValue('POSTGRES_PASSWORD'),
       database: this.getValue('POSTGRES_DB'),
