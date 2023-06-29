@@ -55,6 +55,11 @@ export const testCreateBlogPostInput = {
   blogId: 1,
 };
 
+export const apiTestCreateBlogPostInput = {
+  ...testCreateBlogInput,
+  content: 'test',
+};
+
 export const testUpdateBlogPostInput = {
   ...testUpdateBlogInput,
   content: 'updated',

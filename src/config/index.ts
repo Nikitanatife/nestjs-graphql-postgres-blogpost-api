@@ -54,7 +54,7 @@ class ConfigService {
   }
 
   getPostgresURL(): string {
-    return this.getValue('POSTGRES_URL');
+    return this.getValue('POSTGRES_URL', false);
   }
 
   getDbConfig(): DataSourceOptions {
