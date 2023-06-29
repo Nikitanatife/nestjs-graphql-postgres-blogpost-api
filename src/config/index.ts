@@ -57,7 +57,34 @@ class ConfigService {
     return this.getValue('POSTGRES_URL', false);
   }
 
+  getPostgresTestURL(): string {
+    return this.getValue('POSTGRES_TEST_URL', false);
+  }
+
   getDbConfig(): DataSourceOptions {
+    if (this.getNodeEnv() === 'test') {
+      return {
+        type: 'postgres',
+        ...(this.getPostgresTestURL()
+          ? {
+              url: this.getPostgresTestURL(),
+            }
+          : {
+              port: parseInt(this.getValue('POSTGRES_TEST_PORT')),
+              host: this.getValue('POSTGRES_TEST_HOST') || 'localhost',
+            }),
+        username: this.getValue('POSTGRES_TEST_USER'),
+        password: this.getValue('POSTGRES_TEST_PASSWORD'),
+        database: this.getValue('POSTGRES_TEST_DB'),
+        entities: ['src/modules/**/*.entity.ts'],
+        migrations: ['src/migrations/*.ts'],
+        migrationsTableName: 'migrations_typeorm',
+        migrationsRun: true,
+        logging: true,
+        synchronize: true,
+      };
+    }
+
     return {
       type: 'postgres',
       ...(this.getPostgresURL()
@@ -65,23 +92,14 @@ class ConfigService {
             url: this.getPostgresURL(),
           }
         : {
-            port:
-              this.getNodeEnv() === 'test'
-                ? parseInt(this.getValue('POSTGRES_TEST_PORT'))
-                : parseInt(this.getValue('POSTGRES_PORT')),
+            port: parseInt(this.getValue('POSTGRES_PORT')),
             host: this.getValue('POSTGRES_HOST') || 'localhost',
           }),
       username: this.getValue('POSTGRES_USER'),
       password: this.getValue('POSTGRES_PASSWORD'),
       database: this.getValue('POSTGRES_DB'),
-      entities:
-        this.getNodeEnv() === 'test'
-          ? ['src/modules/**/*.entity.ts']
-          : ['dist/modules/**/*.entity.js'],
-      migrations:
-        this.getNodeEnv() === 'test'
-          ? ['src/migrations/*.ts']
-          : ['dist/migrations/*.js'],
+      entities: ['dist/modules/**/*.entity.js'],
+      migrations: ['dist/migrations/*.js'],
       migrationsTableName: 'migrations_typeorm',
       migrationsRun: true,
       logging: true,
