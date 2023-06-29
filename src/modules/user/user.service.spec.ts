@@ -3,6 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import {
   testBaseEntity,
   testCreateWriterInput,
+  testPassword,
   testWriter,
 } from '../../shared/const';
 import { User } from './entities/user.entity';
@@ -10,7 +11,6 @@ import { UserService } from './user.service';
 
 describe('UserService', () => {
   let service: UserService;
-  const password = 'test';
   const mockUserRepository = {
     save: jest
       .fn()
@@ -46,11 +46,14 @@ describe('UserService', () => {
 
   it('create user', async () => {
     expect(
-      await service.create({ ...testCreateWriterInput, password }),
+      await service.create({
+        ...testCreateWriterInput,
+        password: testPassword,
+      }),
     ).toEqual({
       ...testCreateWriterInput,
       ...testBaseEntity,
-      password,
+      password: testPassword,
     });
   });
 

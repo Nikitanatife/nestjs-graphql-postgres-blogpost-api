@@ -5,6 +5,7 @@ import {
   testBlog,
   testBlogPost,
   testCreateBlogPostInput,
+  testUpdateBlogPostInput,
   testWriter,
 } from '../../shared/const';
 import { BlogService } from '../blog/blog.service';
@@ -98,5 +99,14 @@ describe('BlogPostService', () => {
 
   it('remove blog post', async () => {
     expect(await service.remove(testWriter, 1)).toEqual(true);
+  });
+
+  it('update blog post', async () => {
+    expect(await service.update(testWriter, testUpdateBlogPostInput)).toEqual({
+      ...testBlogPost,
+      ...testUpdateBlogPostInput,
+      author: testWriter,
+      authorId: testWriter.id,
+    });
   });
 });

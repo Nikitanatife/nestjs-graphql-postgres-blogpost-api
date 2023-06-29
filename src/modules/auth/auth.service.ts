@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcryptjs';
+import { CONFLICT_ERROR, WRONG_CREDENTIALS_MESSAGE } from '../../shared/const';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { CreateUserInput, LoginInput } from './inputs';
@@ -29,7 +30,7 @@ export class AuthService {
     let user = await this.userService.findOne({ where: { email } });
 
     if (user) {
-      throw new ConflictException('Email already exists');
+      throw new ConflictException(CONFLICT_ERROR);
     }
 
     const hashedPassword = await this.getHashedPassword(password);
@@ -50,13 +51,13 @@ export class AuthService {
     let user = await this.userService.findOne({ where: { email } });
 
     if (!user) {
-      throw new BadRequestException('Wrong credentials');
+      throw new BadRequestException(WRONG_CREDENTIALS_MESSAGE);
     }
 
     const isPasswordValid = await compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new BadRequestException('Wrong credentials');
+      throw new BadRequestException(WRONG_CREDENTIALS_MESSAGE);
     }
 
     const token = await this.jwtService.signAsync({ id: user.id });

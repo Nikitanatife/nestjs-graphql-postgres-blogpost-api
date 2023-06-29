@@ -4,6 +4,7 @@ import {
   testBaseEntity,
   testBlog,
   testCreateBlogInput,
+  testUpdateBlogInput,
   testWriter,
 } from '../../shared/const';
 import { BlogService } from './blog.service';
@@ -78,5 +79,14 @@ describe('BlogService', () => {
 
   it('remove blog', async () => {
     expect(await service.remove(testWriter, 1)).toEqual(true);
+  });
+
+  it('update blog', async () => {
+    expect(await service.update(testWriter, testUpdateBlogInput)).toEqual({
+      ...testBlog,
+      ...testUpdateBlogInput,
+      author: testWriter,
+      authorId: testWriter.id,
+    });
   });
 });
